@@ -1,0 +1,22 @@
+# Arquivos desnecessários para o GitHub
+.DS_Store
+Thumbs.db
+*.log
+node_modules/
+.env
+.env.local
+
+# Arquivos de backup
+*.bak
+*.backup
+*~
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Sistema
+desktop.ini
+
