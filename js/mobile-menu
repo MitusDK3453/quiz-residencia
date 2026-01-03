@@ -1,0 +1,101 @@
+// js/mobile-menu.js
+// Controle do menu mobile
+
+let menuAberto = false;
+
+export function inicializarMenuMobile() {
+  // Criar botão de menu mobile se não existir
+  if (!document.getElementById('mobile-menu-toggle')) {
+    const btn = document.createElement('button');
+    btn.id = 'mobile-menu-toggle';
+    btn.className = 'mobile-menu-toggle';
+    btn.innerHTML = '☰';
+    btn.setAttribute('aria-label', 'Abrir menu');
+    document.body.appendChild(btn);
+    
+    btn.onclick = toggleMenu;
+  }
+  
+  // Criar overlay se não existir
+  if (!document.getElementById('menu-overlay')) {
+    const overlay = document.createElement('div');
+    overlay.id = 'menu-overlay';
+    overlay.className = 'menu-overlay';
+    document.body.appendChild(overlay);
+    
+    overlay.onclick = fecharMenu;
+  }
+  
+  // Fechar menu ao clicar em um item (mobile)
+  document.addEventListener('click', (e) => {
+    const target = e.target;
+    if (target instanceof Element && target.closest('.menu-item') && window.innerWidth <= 768) {
+      fecharMenu();
+    }
+  });
+  
+  // Fechar menu ao redimensionar para desktop
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768 && menuAberto) {
+      fecharMenu();
+    }
+  });
+}
+
+function toggleMenu() {
+  if (menuAberto) {
+    fecharMenu();
+  } else {
+    abrirMenu();
+  }
+}
+
+function abrirMenu() {
+  const menu = document.getElementById('menu-lateral');
+  const overlay = document.getElementById('menu-overlay');
+  const btn = document.getElementById('mobile-menu-toggle');
+  
+  if (menu) {
+    menu.classList.add('menu-aberto');
+    menuAberto = true;
+  }
+  
+  if (overlay) {
+    overlay.classList.add('active');
+  }
+  
+  if (btn) {
+    btn.innerHTML = '✕';
+    btn.setAttribute('aria-label', 'Fechar menu');
+  }
+  
+  // Prevenir scroll do body
+  document.body.style.overflow = 'hidden';
+}
+
+function fecharMenu() {
+  const menu = document.getElementById('menu-lateral');
+  const overlay = document.getElementById('menu-overlay');
+  const btn = document.getElementById('mobile-menu-toggle');
+  
+  if (menu) {
+    menu.classList.remove('menu-aberto');
+    menuAberto = false;
+  }
+  
+  if (overlay) {
+    overlay.classList.remove('active');
+  }
+  
+  if (btn) {
+    btn.innerHTML = '☰';
+    btn.setAttribute('aria-label', 'Abrir menu');
+  }
+  
+  // Restaurar scroll do body
+  document.body.style.overflow = '';
+}
+
+export function isMenuAberto() {
+  return menuAberto;
+}
